@@ -1,0 +1,139 @@
+doctype html
+html
+	head
+		meta(charset='UTF-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=Edge')
+		meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+		title #{title}
+		//- Favicon
+		//- link(rel='icon', href='favicon.ico', type='image/x-icon')
+		//- Google Fonts
+		link(href='https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext', rel='stylesheet', type='text/css')
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet', type='text/css')
+		//- Bootstrap Core Css
+		link(href='/plugins/bootstrap/css/bootstrap.css', rel='stylesheet')
+		//- Waves Effect Css
+		link(href='/plugins/node-waves/waves.css', rel='stylesheet')
+		//- Animation Css
+		link(href='/plugins/animate-css/animate.css', rel='stylesheet')
+		//- Morris Chart Css
+		link(href='/plugins/morrisjs/morris.css', rel='stylesheet')
+		//- Custom Css
+		link(href='/css/style.css', rel='stylesheet')
+		//- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes
+		link(href='css/themes/all-themes.min.css', rel='stylesheet')
+	body.theme-indigo
+		nav.navbar
+			.container-fluid
+				.navbar-header
+					a.navbar-toggle.collapsed(href='javascript:void(0);', data-toggle='collapse', data-target='#navbar-collapse', aria-expanded='false')
+					a.bars(href='javascript:void(0);')
+					a.navbar-brand(href='/dashboard') Kandi Hostel Management System
+				.collapse.navbar-collapse
+					ul.nav.navbar-nav.navbar-right
+						li.dropdown
+							a.dropdown-toggle(href='javascript:void(0);', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='true')
+								i.material-icons person
+								i.material-icons keyboard_arrow_down
+							ul.dropdown-menu.pull-right
+								li.disabled
+									a.waves-effect.waves-block(href='javascript:void(0);')
+										i.material-icons person_outline
+										| Shubham Kandi
+								li.divider
+								li
+									a.waves-effect.waves-block(href='/logout')
+										i.material-icons input
+										| Sign Out
+		section
+			//- Left Sidebar
+			aside#leftsidebar.sidebar
+				.menu
+					ul.list
+						li(class= (title=='Dashboard') ? 'active':'')
+							a(href='/dashboard')
+								i.material-icons home
+								span Home
+						li(class= (title=='Student Management') ? 'active':'')
+							a.menu-toggle(href='javascript:void(0);')
+								i.material-icons group
+								span Student Management
+							ul.ml-menu
+								li
+									a(href='/add-student') Add Student Record
+								li
+									a(href='/edit-student') Edit Student Record
+								li
+									a(href='/delete-student') Delete Student Record
+						li(class= (title=='Accounts') ? 'active':'')
+							a.menu-toggle(href='javascript:void(0);')
+								i.material-icons account_balance
+								span Accounts
+							ul.ml-menu
+								li
+									a(href='/add-fees') Add Student Fees
+								li
+									a(href='/other-transactions') Other Transactions
+						li(class= (title=='Reports') ? 'active':'')
+							a.menu-toggle(href='javascript:void(0);')
+								i.material-icons assessment
+								span Reports
+							ul.ml-menu
+								li
+									a(href='/student-list') View All Student List
+								li
+									a(href='/student-individual') View Individual Student
+								li
+									a(href='/fees-list') View All Fees List
+								li
+									a(href='/fees-individual') View Individual Fees
+								li
+									a(href='/room-list') View Room List
+				.legal
+					.copyright
+						| © 2016-17 
+						a(href='javascript:void(0);') Kandi Hostel Management System
+						| .
+					.version
+						b Version: 
+						|  0.0.1
+		section.content
+			.container-fluid
+				block content
+		//- Jquery Core Js
+		script(src='plugins/jquery/jquery.min.js')
+		//- Bootstrap Core Js
+		script(src='plugins/bootstrap/js/bootstrap.js')
+		//- Select Plugin Js
+		script(src='plugins/bootstrap-select/js/bootstrap-select.js')
+		//- Slimscroll Plugin Js
+		script(src='plugins/jquery-slimscroll/jquery.slimscroll.js')
+		//- Waves Effect Plugin Js
+		script(src='plugins/node-waves/waves.js')
+		//- Jquery CountTo Plugin Js
+		script(src='plugins/jquery-countto/jquery.countTo.js')
+		//- Morris Plugin Js
+		script(src='plugins/raphael/raphael.min.js')
+		script(src='plugins/morrisjs/morris.js')
+		//- ChartJs
+		script(src='plugins/chartjs/Chart.bundle.js')
+		//- Flot Charts Plugin Js
+		script(src='plugins/flot-charts/jquery.flot.js')
+		script(src='plugins/flot-charts/jquery.flot.resize.js')
+		script(src='plugins/flot-charts/jquery.flot.pie.js')
+		script(src='plugins/flot-charts/jquery.flot.categories.js')
+		script(src='plugins/flot-charts/jquery.flot.time.js')
+		//- Sparkline Chart Plugin Js
+		script(src='plugins/jquery-sparkline/jquery.sparkline.js')
+		//- Custom Js
+		script(src='js/admin.js')
+		//- Bootstrap Notify Plugin
+		script(src='/plugins/bootstrap-notify/bootstrap-notify.js')
+		//- Information Messages
+		script(src='/js/script.js')
+		if successMessage[0] != null
+			script.
+				showNotification('bg-green', '#{successMessage[0]}', 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+		if errorMessage[0] != null
+			script.
+				showNotification('bg-red', '#{errorMessage[0]}', 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
