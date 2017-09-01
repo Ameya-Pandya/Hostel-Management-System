@@ -34,11 +34,16 @@ const logger = new (winston.Logger)({
 
 router.get('/', function (req, res, next) {
     if (req.session != null && req.session.loginDetails != null) {
-        // console.log(req.session);
-        res.render('dashboard', {
+        //generating csrf token
+        let randomNumber = Math.floor(Math.random() * 90000) + 10000,
+            csrfToken = crypto.createHash('sha512').update(randomNumber.toString()).digest('hex');
+        //setting up the csrf token
+        req.session._csrf = csrfToken;
+        res.render('edit-student', {
             successMessage: req.flash('success'),
             errorMessage: req.flash('error'),
-            title: 'Dashboard'
+            title: 'Student Management',
+            csrf_token: csrfToken
         });
     } else {
         req.flash('error', 'Invalid Session or Session Expired');
@@ -46,4 +51,10 @@ router.get('/', function (req, res, next) {
     }
 });
 
+router.post('/get-student-details', function (req, res, next) {
+    console.log(req.body);
+    res.json({
+        success: true
+    });
+});
 module.exports = router;

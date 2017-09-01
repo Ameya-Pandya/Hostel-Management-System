@@ -1,0 +1,66 @@
+extends layout_common
+
+block css
+	//- Date Time Picker
+	link(href='/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' rel='stylesheet')
+	//- Select
+	link(href='/plugins/bootstrap-select/css/bootstrap-select.css' rel='stylesheet')
+	//- Jquery Datatables
+	link(href='/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' rel='stylesheet')
+block content
+	.block-header
+		h2 DELETE STUDENT RECORD
+	.row.clearfix.formrow
+		.card
+			.header.bg-blue
+				h2  Student List
+			.body
+				table#userTable.table.table-hover.table-striped.table-bordered.table-condensed
+					thead
+						tr
+							th #
+							th Room No
+							th Student Name
+							th College Name
+							th Branch Name
+							th Action
+							th.hidden
+					tbody#users
+						if clients != undefined
+							for client, index in clients
+								tr
+									td #{index+1}
+									td #{client.WhmcsId}
+									td #{client.clientName}
+									td #{client.userName}
+									td #{client.email}
+									td 
+										button#edit_button.btn.bg-red.waves-effect(type='button') EDIT
+									td.hidden #{client.clientId}
+						else
+							tr
+								td 1
+								td -101-
+								td -Abc-
+								td -pqr-
+								td -cse-
+								td 
+									button#edit_button.btn.bg-red.btn-block.waves-effect(type='button') DELETE
+								td.hidden Student Id
+block scripts
+	//- Moment Js
+	script(src='/plugins/momentjs/moment.js')
+	//- Date Time Picker
+	script(src='/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')
+	//- Jquery DataTable Plugin Js
+	script(src='/plugins/jquery-datatable/jquery.dataTables.js')
+	script(src='/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')
+	script(src='/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.flash.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/jszip.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/pdfmake.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/vfs_fonts.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.html5.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.print.min.js')
+	//- Page Script
+	script(src='/js/pages/delete-student.js')

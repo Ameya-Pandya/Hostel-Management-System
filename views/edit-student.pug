@@ -1,0 +1,166 @@
+extends layout_common
+
+block css
+	//- Date Time Picker
+	link(href='/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' rel='stylesheet')
+	//- Select
+	link(href='/plugins/bootstrap-select/css/bootstrap-select.css' rel='stylesheet')
+	//- Jquery Datatables
+	link(href='/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' rel='stylesheet')
+block content
+	.block-header
+		h2 EDIT STUDENT RECORD
+	.row.clearfix.formrow
+		.card
+			.header.bg-blue
+				h2  Student List
+			.body
+				table#userTable.table.table-hover.table-striped.table-bordered.table-condensed
+					thead
+						tr
+							th #
+							th Room No
+							th Student Name
+							th College Name
+							th Branch Name
+							th Action
+							th.hidden
+					tbody#users
+						if clients != undefined
+							for client, index in clients
+								tr
+									td #{index+1}
+									td #{client.WhmcsId}
+									td #{client.clientName}
+									td #{client.userName}
+									td #{client.email}
+									td 
+										button#edit_button.btn.bg-red.waves-effect(type='button') EDIT
+									td.hidden #{client.clientId}
+						else
+							tr
+								td 1
+								td -101-
+								td -Abc-
+								td -pqr-
+								td -cse-
+								td 
+									button#edit_button.btn.bg-red.btn-block.waves-effect(type='button') EDIT
+								td.hidden Student Id
+
+	form(method='POST', action='/add-student/new', enctype='multipart/form-data')
+		.row.clearfix.formrow
+			.col-lg-7.col-md-7.col-sm-6.col-xs-12
+				.card
+					.header.bg-blue
+						h2  Personal Details
+					.body
+						.row.clearfix.formrow
+							.col-md-12
+								.form-group.form-float
+									.form-line
+										input.form-control(type='text', name='student_name', disabled='')
+										label.form-label Student Name
+							.col-md-12
+								.form-group.form-float
+									.form-line
+										input.form-control(type='text', name='college_name', disabled='')
+										label.form-label College Name
+							.col-md-6
+								.form-group.form-float
+									.form-line
+										input.form-control(type='text', name='branch', disabled='')
+										label.form-label Branch Name
+							.col-md-6
+								.form-group.form-float
+									.form-line
+										input.form-control(type='number', name='roll_no', disabled='')
+										label.form-label College Roll Number
+						.row.clearfix.formrow
+							.col-md-12
+								.form-group.form-float
+									.form-line
+										textarea.form-control.no-resize(rows='3', placeholder='Permanent Address', name='permanent_address', disabled='')
+							.col-md-12
+								.form-group.form-float
+									.form-line
+										textarea.form-control.no-resize(rows='3', placeholder='Correnspondence Address', name='correspondence_address', disabled='')
+						.row.clearfix.formrow
+							.col-md-6
+								.form-group.form-float
+									.form-line
+										input.form-control(type='number', name='parent_contact', disabled='')
+										label.form-label Parent's Contact Number
+							.col-md-6
+								.form-group.form-float
+									.form-line
+										input.form-control(type='number', name='student_contact', disabled='')
+										label.form-label Student's Contact Number
+					.header.bg-red
+						h2  For Office Use
+					.body
+						.row.clearfix.formrow
+							.col-md-6
+								.form-group.form-float
+									.form-line
+										input.form-control(type='number', name='room_number', disabled='')
+										label.form-label Room Number
+							.col-md-6
+								.form-group
+									.form-line
+										input.datepicker.form-control(type='text', placeholder='Admission Date', name='admission_date', disabled='')
+							.col-md-6
+								.form-group.form-float
+									.form-line
+										input.form-control(type='number', name='rent_amount', disabled='')
+										label.form-label Rent Amount
+							.col-md-6
+								select.form-control.show-tick(name='payment_duration', disabled='')
+									option(value='') -- Payment Duration --
+									option(value='1') Monthly
+									option(value='3') Quarterly
+									option(value='6') Semi-Anually
+									option(value='12') Anually
+			.col-lg-5.col-md-5.col-sm-12.col-xs-12
+				.card
+					.header.bg-blue
+						h2  Documents
+					.body
+						.row.clearfix
+							.col-md-12
+								.form-group
+									label.form-label Student Photo
+									.form-line
+										input#student_photo.form-control(type='file', name='myfile', disabled='')
+							.col-md-12
+								.form-group
+									label.form-label Aadhar Card Photo
+									.form-line
+										input#aadhar_photo.form-control(type='file', name='myfile', disabled='')
+							.col-md-12
+								.form-group
+									label.form-label College ID Card Photo
+									.form-line
+										input#college_photo.form-control.disabled(type='file', name='myfile', disabled='')
+						.row.clearfix.formrow
+							.col-md-6
+								button.btn.bg-green.btn-block.btn-lg.m-l-15.waves-effect.disabled(type='sumit') SUBMIT
+							.col-md-6
+								button.btn.bg-red.btn-block.btn-lg.m-l-15.waves-effect.disabled(type='reset') RESET
+block scripts
+	//- Moment Js
+	script(src='/plugins/momentjs/moment.js')
+	//- Date Time Picker
+	script(src='/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')
+	//- Jquery DataTable Plugin Js
+	script(src='/plugins/jquery-datatable/jquery.dataTables.js')
+	script(src='/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')
+	script(src='/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.flash.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/jszip.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/pdfmake.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/vfs_fonts.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.html5.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.print.min.js')
+	//- Page Script
+	script(src='/js/pages/edit-student.js')
