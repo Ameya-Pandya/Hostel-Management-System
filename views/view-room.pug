@@ -1,0 +1,60 @@
+extends layout_common
+
+block css
+	//- Date Time Picker
+	link(href='/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' rel='stylesheet')
+	//- Select
+	link(href='/plugins/bootstrap-select/css/bootstrap-select.css' rel='stylesheet')
+	//- Jquery Datatables
+	link(href='/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' rel='stylesheet')
+
+block content
+	.block-header
+		h2 VIEW ROOM LIST
+	.row.clearfix.formrow
+		.col-md-6
+			.card
+				.header.bg-blue
+					h2  Room List
+				.body
+					table#userTable.table.table-hover.table-striped.table-bordered.table-condensed.text-center
+						thead
+							tr
+								th #
+								th Room No
+								th Quantity
+						tbody#users
+							if clients != undefined
+								for client, index in clients
+									tr
+										td #{client.WhmcsId}
+										td #{client.clientName}
+										td #{client.userName}
+							else
+								tr
+									td -101-
+									td Ameya Pandya
+									td 5
+
+block scripts
+	//- Moment Js
+	script(src='/plugins/momentjs/moment.js')
+	//- Date Time Picker
+	script(src='/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')
+	//- Jquery DataTable Plugin Js
+	script(src='/plugins/jquery-datatable/jquery.dataTables.js')
+	script(src='/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')
+	script(src='/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.flash.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/jszip.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/pdfmake.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/vfs_fonts.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.html5.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.print.min.js')
+	//- Page Script
+	script.
+		 $('#userTable').DataTable({
+			responsive: true,
+			stateSave: true,
+			lengthChange: false
+		});

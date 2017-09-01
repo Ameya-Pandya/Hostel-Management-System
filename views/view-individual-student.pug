@@ -1,0 +1,74 @@
+extends layout_common
+
+block css
+	//- Date Time Picker
+	link(href='/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' rel='stylesheet')
+	//- Select
+	link(href='/plugins/bootstrap-select/css/bootstrap-select.css' rel='stylesheet')
+	//- Jquery Datatables
+	link(href='/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' rel='stylesheet')
+
+block content
+	.block-header
+		h2 VIEW INDIVIDUAL STUDENT RECORD   
+	.row.clearfix.formrow
+		.card
+			.header.bg-blue
+				h2  Select Student
+			.body
+				table#userTable.table.table-hover.table-striped.table-bordered.table-condensed
+					thead
+						tr
+							th Room No
+							th Student Name
+							th College Name
+							th Branch Name
+							th Admission Date
+							th Student Contact
+							th Parent Contact
+							th Action
+							th.hidden
+					tbody#users
+						if clients != undefined
+							for client, index in clients
+								tr
+									td #{client.WhmcsId}
+									td #{client.clientName}
+									td #{client.userName}
+									td #{client.email}
+									td #{client.date}
+									td #{client.date}
+									td 
+										button#show_button.btn.btn-primary.btn-block.waves-effect(type='button') SHOW
+									td.hidden Student Id 
+						else
+							tr
+								td -101-
+								td Ameya Pandya
+								td Deogiri Institute of Engineering and Management Studies
+								td CSE
+								td 30-12-2017
+								td 7276366102
+								td 7058439431
+								td 
+									button#show_button.btn.btn-primary.btn-block.waves-effect(type='button') SHOW
+								td.hidden Hello Student 
+									
+block scripts
+	//- Moment Js
+	script(src='/plugins/momentjs/moment.js')
+	//- Date Time Picker
+	script(src='/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')
+	//- Jquery DataTable Plugin Js
+	script(src='/plugins/jquery-datatable/jquery.dataTables.js')
+	script(src='/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')
+	script(src='/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.flash.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/jszip.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/pdfmake.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/vfs_fonts.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.html5.min.js')
+	script(src='/plugins/jquery-datatable/extensions/export/buttons.print.min.js')
+	//- Page Script
+	script(src='/js/pages/individual-student.js')
+		

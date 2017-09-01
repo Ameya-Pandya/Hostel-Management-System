@@ -79,6 +79,8 @@ app.use('/add-student', require('./routes/add-student'));
 app.use('/edit-student', require('./routes/edit-student'));
 app.use('/delete-student', require('./routes/delete-student'));
 app.use('/student-list', require('./routes/student-list'));
+app.use('/student-individual', require('./routes/view-individual-student'));
+app.use('/room-list', require('./routes/view-room-list'));
 app.use('/dashboard', require('./routes/dashboard'));
 
 // catch 404 and forward to error handler
