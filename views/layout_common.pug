@@ -18,6 +18,10 @@ html
 		link(href='/plugins/animate-css/animate.css', rel='stylesheet')
 		//- Morris Chart Css
 		link(href='/plugins/morrisjs/morris.css', rel='stylesheet')
+		//- Jquery Datatables
+		link(href='/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css' rel='stylesheet')
+		//- Responsive Datatables
+		link(rel="stylesheet", href='https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css', type='text/css')
 		//- Custom Css
 		link(href='/css/style.css', rel='stylesheet')
 		link(href='/css/custom.css', rel='stylesheet')
@@ -133,6 +137,19 @@ html
 		script(src='/plugins/bootstrap-notify/bootstrap-notify.js')
 		//- Information Messages
 		script(src='/js/script.js')
+		//- Jquery DataTable Plugin Js
+		script(src='/plugins/jquery-datatable/jquery.dataTables.js')
+		script(src='/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')
+		script(src='/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')
+		script(src='/plugins/jquery-datatable/extensions/export/buttons.flash.min.js')
+		script(src='/plugins/jquery-datatable/extensions/export/jszip.min.js')
+		script(src='/plugins/jquery-datatable/extensions/export/pdfmake.min.js')
+		script(src='/plugins/jquery-datatable/extensions/export/vfs_fonts.js')
+		script(src='/plugins/jquery-datatable/extensions/export/buttons.html5.min.js')
+		script(src='/plugins/jquery-datatable/extensions/export/buttons.print.min.js')
+		//- Responsive DataTables
+		script(src='https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js')
+		script(src='https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js')
 		if successMessage[0] != null
 			script.
 				showNotification('bg-green', '#{successMessage[0]}', 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
