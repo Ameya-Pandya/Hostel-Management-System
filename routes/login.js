@@ -38,6 +38,10 @@ let captchaConfig = {
 };
 
 router.get('/', function (req, res, next) {
+	// For Temporary purpose
+	req.session.loginDetails = {
+		status: true
+	};
 	res.render('login', {
 		successMessage: req.flash('success'),
 		errorMessage: req.flash('error')

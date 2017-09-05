@@ -9,7 +9,7 @@ block css
 block content
 	.block-header
 		h2 ADD STUDENT RECORD
-	form(method='POST', action='/add-student/new', enctype='multipart/form-data')
+	form#student_form(method='POST', action='/add-student/new-student' enctype='multipart/form-data')
 		.row.clearfix.formrow
 			.col-lg-7.col-md-7.col-sm-12.col-xs-12
 				.card
@@ -82,6 +82,8 @@ block content
 									option(value='3') Quarterly
 									option(value='6') Semi-Anually
 									option(value='12') Anually
+								.form-group
+									input.form-control(type='hidden', name='_csrf', value=token)
 			.col-lg-5.col-md-5.col-sm-12.col-xs-12
 				.card
 					.header.bg-blue
@@ -92,17 +94,17 @@ block content
 								.form-group
 									label.form-label Student Photo
 									.form-line
-										input#student_photo.form-control(type='file', name='myfile', required='')
+										input#student_photo.form-control(type='file', name='student_photo', required='')
 							.col-md-12
 								.form-group
 									label.form-label Aadhar Card Photo
 									.form-line
-										input#aadhar_photo.form-control(type='file', name='myfile', required='')
+										input#aadhar_photo.form-control(type='file', name='aadhar_card', required='')
 							.col-md-12
 								.form-group
 									label.form-label College ID Card Photo
 									.form-line
-										input#college_photo.form-control(type='file', name='myfile', required='')
+										input#college_photo.form-control(type='file', name='college_id', required='')
 						.row.clearfix.formrow
 							.col-md-6.col-sm-6.col-xs-6
 								button.btn.bg-green.btn-block.btn-lg.m-l-15.waves-effect(type='sumit') SUBMIT
