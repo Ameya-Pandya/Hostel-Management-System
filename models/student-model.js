@@ -93,29 +93,31 @@ module.exports.getAllStudentDetails = function (callback) {
         })
 }
 
-module.exports.getIndividualStudentDetails = function (studentValues, callback) {
+module.exports.getIndividualStudentDetails = function (student_id, callback) {
+    // console.log(student_id);
     knex
         .select('*')
-        .where(studentValues)
         .from('student_table')
-        .joinRaw('natural join office_table natural join documents_table')
+        .innerJoin('office_table', 'student_table.student_id', '=', 'office_table.student_id')
+        .innerJoin('documents_table', 'student_table.student_id', '=', 'documents_table.student_id')
+        .whereRaw('student_table.student_id = ?', [student_id])
         .then(result => {
             callback(false, result);
         })
         .catch(error => {
+            console.log(error);
             logger.error(error);
             callback(true, null);
         });
 }
 
-module.exports.updateStudentDetails = function (studentId, newValues, callback) {
+module.exports.updateStudentDetails = function (student_id, newValues, callback) {
     knex
         .update(newValues)
         .table('student_table')
-        .joinRaw('natural join office_table natural join documents_table')
-        .where({
-            student_id: studentId
-        })
+        .innerJoin('office_table', 'student_table.student_id', '=', 'office_table.student_id')
+        .innerJoin('documents_table', 'student_table.student_id', '=', 'documents_table.student_id')
+        .whereRaw('student_table.student_id = ?', [student_id])
         .then(result => {
             callback(false);
         })
@@ -123,5 +125,49 @@ module.exports.updateStudentDetails = function (studentId, newValues, callback) 
             console.log(error);
             logger.error(error);
             callback(true);
+        });
+}
+
+module.exports.deleteStudent = function (student_id, callback) {
+    knex
+        .transaction(function (t) {
+            return knex('student_table')
+                .transacting(t)
+                .del()
+                .where({
+                    student_id: student_id
+                })
+                .then(function (response) {
+                    return knex('office_table')
+                        .transacting(t)
+                        .del()
+                        .where({
+                            student_id: student_id
+                        })
+                        .then(function (result) {
+                            return knex('documents_table')
+                                .transacting(t)
+                                .del()
+                                .where({
+                                    student_id: student_id
+                                })
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                })
+                .then(t.commit)
+                .catch(t.rollback);
         })
+        .then(function () {
+            // transaction suceeded, data written
+            callback(false);
+        })
+        .catch(function (error) {
+            // console.log('till here');
+            console.log(error);
+            logger.error(error);
+            // transaction failed, data rolled back
+            callback(true);
+        });
 }

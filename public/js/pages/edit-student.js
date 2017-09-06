@@ -1,6 +1,11 @@
 $(function () {
     //Edit Button
     var rowData = [];
+    var deleteData = [];
+    var updateData = {};
+
+    // ======================================================================================
+    // Get Student Details
     $('#edit_button').on('click', function (evt) {
         // console.log(this.parentNode.parentNode);
         $(this.parentNode.parentNode).find('td').each(function () {
@@ -13,8 +18,9 @@ $(function () {
             studentName: rowData[2],
             collegeName: rowData[3],
             contactNo: rowData[4],
-            studentId: rowData[6],
+            studentId: rowData[7],
         };
+        console.log(formData);
         let status = false;
         // console.log(formData);
         //sending the ajax request
@@ -49,6 +55,7 @@ $(function () {
                 }
             },
             error: function (error) {
+                console.log(error);
                 showNotification('bg-red', error, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
                 status = false;
             }
@@ -56,7 +63,8 @@ $(function () {
         return status;
     });
 
-    var updateData = {};
+    // ======================================================================================
+
     $('input').change(function (e) {
         var name = this.name;
         updateData[name] = this.value;
@@ -100,6 +108,50 @@ $(function () {
         return status;
     });
 
+    // ======================================================================================
+
+    // Delete Ajax
+    $('#delete_button').on('click', function (evt) {
+        // console.log(this.parentNode.parentNode);
+        $(this.parentNode.parentNode).find('td').each(function () {
+            var cellText = $(this).html();
+            // console.log(cellText);
+            deleteData.push(cellText);
+        });
+        let formData = {
+            roomNo: deleteData[1],
+            studentName: deleteData[2],
+            collegeName: deleteData[3],
+            contactNo: deleteData[4],
+            studentId: deleteData[7],
+        };
+        let status = false;
+
+        $.ajax({
+            type: 'POST',
+            url: '/edit-student/delete-student',
+            data: formData,
+            success: function (data) {
+                if (data.success == true) {
+                    showNotification('bg-green', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                    status = true;
+                    location.reload();
+                } else {
+                    showNotification('bg-red', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                    status = false;
+                }
+            },
+            error: function (error) {
+                $('#editStudentModal').modal('toggle');
+                showNotification('bg-red', error, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                console.log(error);
+                status = false;
+            }
+        })
+        return status;
+    });
+
+    // ======================================================================================
     $('.datepicker').bootstrapMaterialDatePicker({
         format: 'DD-MM-YYYY',
         clearButton: true,

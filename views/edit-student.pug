@@ -23,7 +23,8 @@ block content
 								th Student Name
 								th College Name
 								th Student Contact
-								th Action
+								th Edit
+								th Delete
 								th.hidden
 						tbody#users
 							if student_records != undefined
@@ -35,7 +36,9 @@ block content
 										td #{student.college_name}
 										td #{student.student_contact}
 										td 
-											button#edit_button.btn.bg-red.waves-effect(type='button') EDIT
+											button#edit_button.btn.bg-deep-orange.waves-effect.btn-block(type='button') EDIT
+										td
+											button#delete_button.btn.bg-red.waves-effect.btn-block(type='button') DELETE
 										td.hidden #{student.student_id}
 
 		.col-md-12

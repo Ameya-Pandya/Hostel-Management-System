@@ -64,17 +64,11 @@ router.get('/', function (req, res, next) {
 router.post('/get-student-details', function (req, res, next) {
     if (req.session != null && req.session.loginDetails != null) {
         // console.log(req.body);
-        var searchParams = {
-            student_id: entities.encode(req.body.studentId),
-            room_no: entities.encode(req.body.roomNo),
-            student_name: entities.encode(req.body.studentName),
-            college_name: entities.encode(req.body.collegeName),
-            student_contact: entities.encode(req.body.contactNo),
-        };
+        var student_id = entities.encode(req.body.studentId);
         //generating csrf token
         let randomNumber = Math.floor(Math.random() * 90000) + 10000,
             csrfToken = crypto.createHash('sha512').update(randomNumber.toString()).digest('hex');
-        studentObj.getIndividualStudentDetails(searchParams, function (error, studentDetails) {
+        studentObj.getIndividualStudentDetails(student_id, function (error, studentDetails) {
             if (error) {
                 res.json({
                     success: false,
@@ -82,6 +76,7 @@ router.post('/get-student-details', function (req, res, next) {
                     student_details: null
                 });
             } else {
+                // console.log(studentDetails);
                 studentDetails[0]._csrf = csrfToken;
                 //setting up the csrf token
                 req.session._csrf = csrfToken;
@@ -136,8 +131,32 @@ router.post('/update-student', function (req, res, next) {
     } else {
         res.json({
             success: false,
-            msg: 'Invalid Session'
+            msg: 'Invalid Session. Please Re-Login'
         });
     }
 });
+
+router.post('/delete-student', function (req, res, next) {
+    if (req.session != null && req.session.loginDetails != null) {
+        var student_id = req.body.studentId;
+        studentObj.deleteStudent(student_id, function (isError) {
+            if (isError == true) {
+                res.json({
+                    success: false,
+                    msg: 'Error Deleting the Data'
+                });
+            } else {
+                res.json({
+                    success: true,
+                    msg: 'Student Record Deleted Successfully'
+                });
+            }
+        });
+    } else {
+        res.json({
+            success: false,
+            msg: 'Invalid Session. Please Re-Login'
+        });
+    }
+})
 module.exports = router;
