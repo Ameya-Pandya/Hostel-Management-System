@@ -80,3 +80,48 @@ module.exports.add_new_student = function (studentDetails, officeDetails, docume
             callback(true);
         });
 }
+
+module.exports.getAllStudentDetails = function (callback) {
+    knex('student_table')
+        .select()
+        .then(result => {
+            callback(false, result)
+        })
+        .catch(error => {
+            logger.error(error);
+            callback(true, null);
+        })
+}
+
+module.exports.getIndividualStudentDetails = function (studentValues, callback) {
+    knex
+        .select('*')
+        .where(studentValues)
+        .from('student_table')
+        .joinRaw('natural join office_table natural join documents_table')
+        .then(result => {
+            callback(false, result);
+        })
+        .catch(error => {
+            logger.error(error);
+            callback(true, null);
+        });
+}
+
+module.exports.updateStudentDetails = function (studentId, newValues, callback) {
+    knex
+        .update(newValues)
+        .table('student_table')
+        .joinRaw('natural join office_table natural join documents_table')
+        .where({
+            student_id: studentId
+        })
+        .then(result => {
+            callback(false);
+        })
+        .catch(error => {
+            console.log(error);
+            logger.error(error);
+            callback(true);
+        })
+}

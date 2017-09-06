@@ -12,7 +12,7 @@ $(function () {
             roomNo: rowData[1],
             studentName: rowData[2],
             collegeName: rowData[3],
-            branchName: rowData[4],
+            contactNo: rowData[4],
             studentId: rowData[6],
         };
         let status = false;
@@ -23,22 +23,82 @@ $(function () {
             url: '/edit-student/get-student-details',
             data: formData,
             success: function (data) {
+                var studentDetails = data.student_details;
+                // console.log(studentDetails);
                 if (data.success == true) {
-                    showNotification('bg-green', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                    // showNotification('bg-green', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
                     status = true;
+                    //Showing the Modal
+                    $('#editStudentModal').modal();
+                    $('input').each(function (index, element) {
+                        // console.log(studentDetails);
+                        // var name = ;
+                        // console.log(studentDetails[element.name]);
+                        $(element).val(studentDetails[element.name]);
+
+                    });
+                    $('textarea').each(function (index, field) {
+                        $(field).val(studentDetails[field.name]);
+                    });
+                    // console.log(studentDetails.rent_duration);
+                    // console.log($('select[name="payment_duration"]').val());
+                    $('select[name="payment_duration"]').val(studentDetails.rent_duration).change();
                 } else {
                     showNotification('bg-red', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
                     status = false;
                 }
             },
             error: function (error) {
-                showNotification('bg-red', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                showNotification('bg-red', error, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
                 status = false;
             }
         });
         return status;
     });
 
+    var updateData = {};
+    $('input').change(function (e) {
+        var name = this.name;
+        updateData[name] = this.value;
+        // console.log(updateData);
+    })
+
+    $('textarea').change(function (e) {
+        var name = this.name;
+        updateData[name] = this.value;
+    });
+
+    // Updating the data
+    $('#editForm').submit(function (evt) {
+        evt.preventDefault();
+        updateData.student_id = $('input[name="student_id"').val();
+        updateData._csrf = $('input[name="_csrf"').val();
+        let status = false;
+        $.ajax({
+            type: 'POST',
+            url: '/edit-student/update-student',
+            data: updateData,
+            success: function (data) {
+                if (data.success == true) {
+                    $('#editStudentModal').modal('toggle');
+                    showNotification('bg-green', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                    status = true;
+                    location.reload();
+                } else {
+                    $('#editStudentModal').modal('toggle');
+                    showNotification('bg-red', data.msg, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                    status = false;
+                }
+            },
+            error: function (error) {
+                $('#editStudentModal').modal('toggle');
+                showNotification('bg-red', error, 'top', 'center', 'animated bounceInDown', 'animated bounceOutDown');
+                console.log(error);
+                status = false;
+            }
+        })
+        return status;
+    });
 
     $('.datepicker').bootstrapMaterialDatePicker({
         format: 'DD-MM-YYYY',
@@ -62,10 +122,6 @@ $(function () {
         formData.append('college_photo', file);
     });
     $('#userTable').DataTable({
-        dom: 'Bfrtip',
-        responsive: true,
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        responsive: true
     });
 });

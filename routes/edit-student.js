@@ -22,6 +22,8 @@ if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }
 
+var studentObj = require('../models/student-model');
+
 const logger = new (winston.Logger)({
     transports: [
         new (winston.transports.File)({
@@ -34,16 +36,24 @@ const logger = new (winston.Logger)({
 
 router.get('/', function (req, res, next) {
     if (req.session != null && req.session.loginDetails != null) {
-        //generating csrf token
-        let randomNumber = Math.floor(Math.random() * 90000) + 10000,
-            csrfToken = crypto.createHash('sha512').update(randomNumber.toString()).digest('hex');
-        //setting up the csrf token
-        req.session._csrf = csrfToken;
-        res.render('edit-student', {
-            successMessage: req.flash('success'),
-            errorMessage: req.flash('error'),
-            title: 'Student Management',
-            csrf_token: csrfToken
+        //getting all student records
+        studentObj.getAllStudentDetails(function (error, studentRecord) {
+            if (error) {
+                req.flash('error', 'Error Getting the student records');
+                res.render('edit-student', {
+                    successMessage: req.flash('success'),
+                    errorMessage: req.flash('error'),
+                    title: 'Student Management',
+                    student_records: null
+                });
+            } else {
+                res.render('edit-student', {
+                    successMessage: req.flash('success'),
+                    errorMessage: req.flash('error'),
+                    title: 'Student Management',
+                    student_records: studentRecord
+                });
+            }
         });
     } else {
         req.flash('error', 'Invalid Session or Session Expired');
@@ -52,9 +62,82 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/get-student-details', function (req, res, next) {
-    console.log(req.body);
-    res.json({
-        success: true
-    });
+    if (req.session != null && req.session.loginDetails != null) {
+        // console.log(req.body);
+        var searchParams = {
+            student_id: entities.encode(req.body.studentId),
+            room_no: entities.encode(req.body.roomNo),
+            student_name: entities.encode(req.body.studentName),
+            college_name: entities.encode(req.body.collegeName),
+            student_contact: entities.encode(req.body.contactNo),
+        };
+        //generating csrf token
+        let randomNumber = Math.floor(Math.random() * 90000) + 10000,
+            csrfToken = crypto.createHash('sha512').update(randomNumber.toString()).digest('hex');
+        studentObj.getIndividualStudentDetails(searchParams, function (error, studentDetails) {
+            if (error) {
+                res.json({
+                    success: false,
+                    msg: 'Error Occured During the Search',
+                    student_details: null
+                });
+            } else {
+                studentDetails[0]._csrf = csrfToken;
+                //setting up the csrf token
+                req.session._csrf = csrfToken;
+                res.json({
+                    success: true,
+                    msg: 'Student Record Found',
+                    student_details: studentDetails[0]
+                });
+            }
+        })
+    } else {
+        req.flash('error', 'Invalid Session or Session Expired');
+        res.redirect('/');
+    }
+    // res.json({
+    //     success: true
+    // });
+});
+
+router.post('/update-student', function (req, res, next) {
+    if (req.session != null && req.session.loginDetails != null) {
+        // console.log(req.body);
+        if (req.session._csrf == req.body._csrf) {
+            var data = req.body;
+            var studentId = data.student_id;
+            delete data.student_id;
+            delete data._csrf;
+            var updateData = {};
+            for (var key in data) {
+                updateData[key] = entities.encode(data[key]);
+            }
+            // console.log(updateData);
+            studentObj.updateStudentDetails(studentId, updateData, function (err) {
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: 'Error Updating the Data'
+                    });
+                } else {
+                    res.json({
+                        success: true,
+                        msg: 'Data Updated Successfully'
+                    });
+                }
+            });
+        } else {
+            res.json({
+                success: false,
+                msg: 'Invalid token'
+            });
+        }
+    } else {
+        res.json({
+            success: false,
+            msg: 'Invalid Session'
+        });
+    }
 });
 module.exports = router;
